@@ -1,3 +1,5 @@
+const recipesWords = [];
+
 function getRecipe(){
   const recipes = fetch('./data/recipes.json')
                   .then(data => data.json())
@@ -7,91 +9,53 @@ function getRecipe(){
   return recipes;
 }
 
-async function searchRecipe() {
-  //récupération de l'array des mots
-  const words = init();
-  console.log(words[0])
+async function init() {
+  //récupération des recettes
+  const array = await getRecipe();
+  
+  //boucle de création du array des recettes
+  for(let i = 0; i < array.length; i++){
+    let obj = new Object;
+    obj.id = array[i].id;
+    obj.words = [];
+    for(let j = 0;j < array[i].name.split(' ').length; j++){
+      obj.words.push(array[i].name.split(' ')[j]);
+    }
+    for(let j = 0;j < array[i].description.split(' ').length; j++){
+      obj.words.push(array[i].description.split(' ')[j]);
+    }
+    for(let j = 0;j < array[i].ingredients.length; j++){
+      for(let k = 0;k < array[i].ingredients[j].ingredient.split(' ').length; k++){
+        obj.words.push(array[i].ingredients[j].ingredient.split(' ')[k]);
+      }      
+    }
+    recipesWords.push(obj);
+  }
+}
 
+function searchRecipe() {
   //récupération du mot recherché
   const wordSeeked = document.getElementById('search').value;
-  console.log(wordSeeked);
 
   //boucle de recherche des recettes
-  const response = [];
-  for(let i = 0; i < words.length; i++){
-    for(let j = 0; j < words[i].words.length; j++){
-      if(words[i].words[j] == wordSeeked){
-        response.push(words[i].id);
-
-        //affichage de la recette
-        // document.getElementById('recipe').innerHTML = `<h1>${words[i].id}</h1>`;
-        // document.getElementById('recipe').innerHTML += `<p>${words[i].words}</p>`;
+  let responses = [];
+  for(let i = 0; i < recipesWords.length; i++){
+    for(let j = 0; j < recipesWords[i].words.length; j++){
+      if(recipesWords[i].words[j] == wordSeeked){ 
+        responses.push(recipesWords[i].id);      
       }
     }
   }
-
-  console.log(response);
-
-  // for(let i = 0; i < recipes.length; i++){
-  //   let obj = new Object;
-  //   obj.id = recipes[i].id;
-  //   obj.words = [];
-  //   obj.words.push(recipes[i].name.split(' '));
-  //   // for(let j = 0; j < recipes[i].ingredients.length; j++){
-  //   //   obj.ingredient = recipes[i].ingredients[j].ingredient.split(' ')
-  //   // }
-  //   // obj.name = recipes[i].name.split(' ')
-  //   // obj.description = recipes[i].description.split(' ')
-
-  //   array.push(obj);
-  // }
-  // console.log(array);
-
-  // for(let i = 0; i < array.length; i++){
-  //   let j = 0;
-  //   while(array[i].ingredient[j] != input.value){
-  //     j++;
-  //   }
-  //   for(let j = 0; j < array[i].ingredient.length; j++){
-  //     if(array[i].ingredient[j] === input.value){
-  //       arrayReponse.push(array[i].id);
-  //     }
-  //   }
-  //   for(let k = 0; k < array[i].name.length; k++){
-      
-  //   }
-  //   for(let l = 0; l < array[i].description.length; l++){
-  //     if(array[i].description[j] === input.value || array[i].ingredient[j] === input.value || array[i].name[k] === input.value){
-  //       arrayReponse.push(array[i].id);
-  //     }
-  //   }
-  // }
-
-  // console.log(arrayReponse);
-  }
-
-async function init() {
-  //récupération des recettes
-  const recipes = await getRecipe();
   
-  //boucle de création du array des recettes
-  const array = [];
-  for(let i = 0; i < recipes.length; i++){
-    let obj = new Object;
-    obj.id = recipes[i].id;
-    obj.words = [];
-    for(let j = 0;j < recipes[i].name.split(' ').length; j++){
-      obj.words.push(recipes[i].name.split(' ')[j]);
+  //nettoyage du tableau de réponses
+  let clearResponse = [];
+  for(let i = 0; i < responses.length; i++){
+    if(responses[i] != responses[i+1]){
+      clearResponse.push(responses[i]);
     }
-    for(let j = 0;j < recipes[i].description.split(' ').length; j++){
-      obj.words.push(recipes[i].description.split(' ')[j]);
-    }
-    for(let j = 0;j < recipes[i].ingredients.length; j++){
-      for(let k = 0;k < recipes[i].ingredients[j].ingredient.split(' ').length; k++){
-        obj.words.push(recipes[i].ingredients[j].ingredient.split(' ')[k]);
-      }      
-    }
-    array.push(obj);
   }
-  return array;
-}
+
+  console.log(clearResponse);  
+  }
+
+init();
