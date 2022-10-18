@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+
+body{
+  font-family: 'Lato', sans-serif !important;
+  margin: auto;
+  width: 80%;
+}
+
+/*Logo header*/
+.img-container{
+  display: flex;
+  justify-content: center;
+}
+
+.img-logo{
+  width: 15%;
+}
+
+/*Barre de recherche des recettes*/
+.search-container{
+  display: flex;
+  justify-content: center;
+}
+
+#search{
+  width: 100%;
+  height: 60px;
+  border-radius: 5px;
+  background: #e7e7e7;
+  border: none;
+  padding: 0 20px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+/*Filtre de recherche*/
+.filter-container{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin: 10px 0;
+}
+
+.filter{
+  width: 150px;
+  height: 80px;
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  margin: 50px 0;
+  border-radius: 5px;
+  text-transform: uppercase;  
+  margin: 0 20px;
+}
+
+.disabled{
+  display: none;
+}
+
+.enabled{
+  display: flex;
+}
+
+.expanded{
+  width: 500px;
+  height: 300px;
+}
+
+.ingredients{
+  background: #3282f7;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.inputFilter{
+  background: #3282f7;
+  color: white;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.inputFilter::placeholder{
+  color:white;
+}
+
+.listIngredients{
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow: scroll;
+}
+
+.listIngredients span{
+  width: 30%;
+}
+
+.appareils{
+  background: #68d9a4;
+  color: white;
+}
+
+.ustensiles{
+  background: #ed6454;
+  color: white;
+}
+
+section{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+article{
+  width: 30%;
+  height: 500px;
+  background: #e7e7e8;
+  display: flex;
+  flex-direction: column;
+  font-family: verdana;
+  font-size: 14px;
+  margin: 10px 0 ;
+  border-radius: 5px;
+}
+
+article .img{
+  width: 100%;
+  height: 50%;
+  background: black
+}
+
+.title, .description{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.time::before{
+  content: "🕒 ";
+}
+
+.description p {
+  width: 40%;
+  height: 135px;
+  overflow: hidden;
+}
+
+.content{
+  height: 50%;
+  font-family: 'Lato', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
