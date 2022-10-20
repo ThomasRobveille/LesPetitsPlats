@@ -12,62 +12,6 @@ function getRecipe(){
   return recipes;
 }
 
-async function init() {
-  //récupération des recettes
-  const array = await getRecipe();
-
-  displayRecipe(array);
-  
-  //boucle de création du tableau des recettes
-  for(let i = 0; i < array.length; i++){
-    let obj = new Object;
-    obj.id = array[i].id;
-    obj.words = [];
-    for(let j = 0;j < array[i].name.split(' ').length; j++){
-      obj.words.push(array[i].name.split(' ')[j]);
-    }
-    for(let j = 0;j < array[i].description.split(' ').length; j++){
-      obj.words.push(array[i].description.split(' ')[j]);
-    }
-    for(let j = 0;j < array[i].ingredients.length; j++){
-      for(let k = 0;k < array[i].ingredients[j].ingredient.split(' ').length; k++){
-        obj.words.push(array[i].ingredients[j].ingredient.split(' ')[k]);
-      }      
-    }
-    recipesWords.push(obj);
-  }
-
-  //boucle de création du tableau des ingredients
-  for(let i = 0; i < array.length; i++){
-    for(let j = 0;j < array[i].ingredients.length; j++){
-      if(!listIngredient.includes(array[i].ingredients[j].ingredient.toLowerCase())){
-        listIngredient.push(array[i].ingredients[j].ingredient.toLowerCase());
-      }
-    }
-  }
-  console.log(listIngredient);
-  createFilter(listIngredient, 'listIngredients');
-
-  //boucle de création du tableau des appareils
-  for(let i = 0; i < array.length; i++){
-    if(!listAppareils.includes(array[i].appliance.toLowerCase())){
-      listAppareils.push(array[i].appliance.toLowerCase());
-    }
-  }
-  createFilter(listAppareils, 'filterAppareils');
-
-  //boucle de création du tableau des ustenciles
-  for(let i = 0; i < array.length; i++){
-    for(let j = 0;j < array[i].ustensils.length; j++){
-      if(!listUstenciles.includes(array[i].ustensils[j].toLowerCase())){
-        listUstenciles.push(array[i].ustensils[j].toLowerCase());
-      }
-    }
-  }
-  createFilter(listUstenciles, 'filterUstensiles');
-
-}
-
 async function searchRecipe() {
   //récupération du mot recherché
   const wordSeeked = document.getElementById('search').value;  
@@ -170,27 +114,97 @@ function createFilter(datas, divId) {
     span.textContent = data;
     filter.appendChild(span);
   });
-
-  // datas.forEach((data) => {
-  //   const option = new Option(data, data);
-  //   filter.options[filter.options.length] = option;
-  // });
-  
 }
 
-function displayIngredient(){
-  //affiche le select des ingredients
-  const filterIngredientContainer = document.getElementById('filterIngredientContainer'); 
-  filterIngredientContainer.classList.toggle('expanded');
+//Affichage des filtres
+function displayFilter(filterName){
+  const filterContainer = document.getElementById(filterName + "Container");
+  filterContainer.classList.toggle('expanded');
 
-  const filterIngredientTitle = document.getElementById('filterIngredientTitle');
-  filterIngredientTitle.classList.toggle('enabled');
+  const filterTitle = document.getElementById(filterName + "Title");
+  filterTitle.classList.toggle('enabled');
 
-  const filterIngredientInput = document.getElementById('filterIngredientInput');
-  filterIngredientInput.classList.toggle('enabled');
+  const filterInput = document.getElementById(filterName + "Input");
+  filterInput.classList.toggle('enabled');
 
-  const listIngredients = document.getElementById('listIngredients');
-  listIngredients.classList.toggle('enabled');
+  const filterClose = document.getElementById(filterName + "Close");
+  filterClose.classList.toggle('rotation');
+
+  const filter = document.getElementById(filterName);
+  filter.classList.toggle('enabled');
+}
+
+//Fermeture des filtres
+function closeFilter(filterName){
+  const filterContainer = document.getElementById(filterName + "Container");
+  filterContainer.classList.toggle('expanded');
+
+  const filterTitle = document.getElementById(filterName + "Title");
+  filterTitle.classList.toggle('enabled');
+
+  const filterInput = document.getElementById(filterName + "Input");
+  filterInput.classList.toggle('enabled');
+
+  const filterClose = document.getElementById(filterName + "Close");
+  filterClose.classList.toggle('rotation');
+
+  const filter = document.getElementById(filterName);
+  filter.classList.toggle('enabled');
+}
+
+async function init() {
+  //récupération des recettes
+  const array = await getRecipe();
+
+  displayRecipe(array);
+  
+  //boucle de création du tableau des recettes
+  for(let i = 0; i < array.length; i++){
+    let obj = new Object;
+    obj.id = array[i].id;
+    obj.words = [];
+    for(let j = 0;j < array[i].name.split(' ').length; j++){
+      obj.words.push(array[i].name.split(' ')[j]);
+    }
+    for(let j = 0;j < array[i].description.split(' ').length; j++){
+      obj.words.push(array[i].description.split(' ')[j]);
+    }
+    for(let j = 0;j < array[i].ingredients.length; j++){
+      for(let k = 0;k < array[i].ingredients[j].ingredient.split(' ').length; k++){
+        obj.words.push(array[i].ingredients[j].ingredient.split(' ')[k]);
+      }      
+    }
+    recipesWords.push(obj);
+  }
+
+  //boucle de création du tableau des ingredients
+  for(let i = 0; i < array.length; i++){
+    for(let j = 0;j < array[i].ingredients.length; j++){
+      if(!listIngredient.includes(array[i].ingredients[j].ingredient.toLowerCase())){
+        listIngredient.push(array[i].ingredients[j].ingredient.toLowerCase());
+      }
+    }
+  }
+  console.log(listIngredient);
+  createFilter(listIngredient, 'ingredients');
+
+  //boucle de création du tableau des appareils
+  for(let i = 0; i < array.length; i++){
+    if(!listAppareils.includes(array[i].appliance.toLowerCase())){
+      listAppareils.push(array[i].appliance.toLowerCase());
+    }
+  }
+  createFilter(listAppareils, 'appareils');
+
+  //boucle de création du tableau des ustenciles
+  for(let i = 0; i < array.length; i++){
+    for(let j = 0;j < array[i].ustensils.length; j++){
+      if(!listUstenciles.includes(array[i].ustensils[j].toLowerCase())){
+        listUstenciles.push(array[i].ustensils[j].toLowerCase());
+      }
+    }
+  }
+  createFilter(listUstenciles, 'ustenciles');
 }
 
 init();
