@@ -38,7 +38,7 @@ async function init() {
   }
 }
 
-function searchRecipe() {
+async function searchRecipe() {
   //récupération du mot recherché
   const wordSeeked = document.getElementById('search').value;
 
@@ -60,9 +60,22 @@ function searchRecipe() {
     }
   }
 
+  //affichage des recettes
+  const recipes = await getRecipe();
+  let newRecipes = [];
+  for(let i = 0; i < clearResponse.length; i++){
+    for(let j = 0; j < recipes.length; j++){
+      if(recipes[j].id == clearResponse[i]){
+        newRecipes.push(recipes[j]);
+      }
+    }
+  }
+
   if(clearResponse.length > 0){
     displayRecipe(newRecipes)
     console.log(clearResponse);  
+  } else {
+    alert ("Aucune recette ne correspond à votre critère... Vous pouvez chercher « tarte aux pommes », « poisson », etc.");
   }
 }
 
