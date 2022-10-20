@@ -4,11 +4,47 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Les Petits Plats</title>
+  <link rel="stylesheet" href="style.css"/>
+  <title>Les Petits Plats - Algo 2</title>
 </head>
 <body>
-  <input id="search" type="text"/>
-  <button id="button" onclick="searchRecipe()">Recherche</button>
+  <header class="img-container">
+    <img src="https://user.oc-static.com/upload/2020/08/14/15973932905401_logo%20%281%29.png" alt="logo les petits plats" class="img-logo"/>
+  </header>
+  <div class="search-container">
+    <input id="search" type="text" placeholder="Rechercher une recette"/>
+    <button id="button" onclick="searchRecipe()">🔍</button>
+  </div>
+  <div class="filter-container">
+    <div id="ingredientsContainer" class="filter ingredients">
+      <div id="ingredientsHeader" class="filterHeader">
+        <h4 id="ingredientsTitle" class="filterTitle disabled enabled" onclick="displayFilter('ingredients')">Ingrédients</h4>
+        <input type="text" id="ingredientsInput" placeholder="rechercher un ingrédient" class="filterInput disabled"/>
+        <div id="ingredientsClose" class="filterClose" onclick="closeFilter('ingredients')"><img src="./assets/icons/chevronHaut.png" /></div>  
+      </div>
+      <div id="ingredients" class="filterList disabled"></div>
+    </div>
+
+    <div id="appareilsContainer" class="filter ingredients">      
+      <div id="appareilsHeader" class="filterHeader">
+        <h4 id="appareilsTitle" class="filterTitle disabled enabled" onclick="displayFilter('appareils')">Appareils</h4>
+        <input type="text" id="appareilsInput" placeholder="rechercher un appareil" class="filterInput disabled"/>
+        <div id="appareilsClose" class="filterClose" onclick="closeFilter('appareils')"><img src="./assets/icons/chevronHaut.png" /></div>
+      </div>
+      <div id="appareils" class="filterList disabled"></div>
+    </div>
+
+    <div id="ustencilesContainer" class="filter ingredients">
+      <div id="ustencilesHeader" class="filterHeader">
+        <h4 id="ustencilesTitle" class="filterTitle disabled enabled" onclick="displayFilter('ustenciles')">Ustenciles</h4>
+        <input type="text" id="ustencilesInput" placeholder="rechercher un ustencile" class="filterInput disabled"/>
+        <div id="ustencilesClose" class="filterClose" onclick="closeFilter('ustenciles')"><img src="./assets/icons/chevronHaut.png" /></div>
+      </div>
+      <div id="ustenciles" class="filterList disabled"></div>
+    </div>
+  </div>
+  <section id="recipesSection"></section>
+
   <script src="script.js"></script>
 </body>
 </html>

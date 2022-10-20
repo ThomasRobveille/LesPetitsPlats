@@ -1,4 +1,7 @@
 const recipesWords = [];
+const listIngredient = [];
+const listAppareils = [];
+const listUstenciles = [];
 
 function getRecipe(){
   const recipes = fetch('./data/recipes.json')
@@ -12,6 +15,8 @@ function getRecipe(){
 async function init() {
   //récupération des recettes
   const array = await getRecipe();
+
+  displayRecipe(array);
   
   //boucle de création du array des recettes
   for(let i = 0; i < array.length; i++){
@@ -55,7 +60,119 @@ function searchRecipe() {
     }
   }
 
-  console.log(clearResponse);  
+  if(clearResponse.length > 0){
+    displayRecipe(newRecipes)
+    console.log(clearResponse);  
   }
+}
+
+function displayRecipe(recipes){
+  const recipesSection = document.getElementById('recipesSection');
+  recipesSection.innerHTML = '';
+
+  recipes.forEach((recipe) => {
+    const recipesModel = createHTML(recipe);
+    const recipeCardDOM = recipesModel.recipeCardDOM();
+    recipesSection.appendChild(recipeCardDOM);
+  });
+}
+
+function createHTML(recipes){
+  const { name, time, ingredients, description } = recipes;
+
+  function recipeCardDOM() {
+    const article = document.createElement('article');
+
+    const img = document.createElement('div');
+    img.classList.add('img');
+    article.appendChild(img);
+
+    const content = document.createElement('div');
+    content.classList.add('content');
+    article.appendChild(content);
+
+    const title = document.createElement('div');
+    title.classList.add('title');
+    content.appendChild(title);
+  
+    const h2 = document.createElement('h2');
+    h2.textContent = name;
+    title.appendChild(h2);
+  
+    const cookTime = document.createElement('p');
+    cookTime.classList.add('time');
+    cookTime.textContent = time + " min";
+    title.appendChild(cookTime);
+
+    const descrip = document.createElement('div');
+    descrip.classList.add('description');
+    descrip.title = description;
+    content.appendChild(descrip);
+  
+    const ul = document.createElement('ul');
+    for(let i = 0; i < ingredients.length; i++){
+      const li = document.createElement('li');
+      li.textContent = ingredients[i].ingredient + " : " + ingredients[i].quantity + " " + ingredients[i].unit;
+      ul.appendChild(li);
+    }
+    descrip.appendChild(ul);
+  
+    const p2 = document.createElement('p');
+    p2.textContent = description;
+    descrip.appendChild(p2);
+  
+    return article;
+  }  
+
+  return { recipeCardDOM };
+}
+
+//Création des filtres
+function createFilter(datas, divId) {
+  const filter = document.getElementById(divId);
+
+  datas.forEach((data) => {
+    const span = document.createElement('span');
+    span.textContent = data;
+    filter.appendChild(span);
+  });
+}
+
+//Affichage des filtres
+function displayFilter(filterName){
+  const filterContainer = document.getElementById(filterName + "Container");
+  filterContainer.classList.toggle('expanded');
+
+  const filterTitle = document.getElementById(filterName + "Title");
+  filterTitle.classList.toggle('enabled');
+
+  const filterInput = document.getElementById(filterName + "Input");
+  filterInput.classList.toggle('enabled');
+
+  const filterClose = document.getElementById(filterName + "Close");
+  filterClose.classList.toggle('rotation');
+
+  const filter = document.getElementById(filterName);
+  filter.classList.toggle('enabled');
+}
+
+//Fermeture des filtres
+function closeFilter(filterName){
+  const filterContainer = document.getElementById(filterName + "Container");
+  filterContainer.classList.toggle('expanded');
+
+  const filterTitle = document.getElementById(filterName + "Title");
+  filterTitle.classList.toggle('enabled');
+
+  const filterInput = document.getElementById(filterName + "Input");
+  filterInput.classList.toggle('enabled');
+
+  const filterClose = document.getElementById(filterName + "Close");
+  filterClose.classList.toggle('rotation');
+
+  const filter = document.getElementById(filterName);
+  filter.classList.toggle('enabled');
+}
+
 
 init();
