@@ -144,7 +144,7 @@ function addTag(name, type){
 //Recherche par filtre
 async function searchFilter(){
   let clearResponse = [];
-
+recipesFilter
 
   for(let i = 0; i < listTag.length; i++){
     if(listTag[i].type == "ingredients"){
@@ -161,10 +161,10 @@ async function searchFilter(){
           clearResponse.push(recipesFilter[j].id);
         }
       }
-    } else if(listTag[i].type == "ustensiles"){    
+    } else if(listTag[i].type == "ustenciles"){    
       for(let j = 0; j < recipesFilter.length; j++){
-        for(let k = 0; k < recipesFilter[j].ustensiles.length; k++){
-          if(recipesFilter[j].ustensiles[k] == listTag[i].name){
+        for(let k = 0; k < recipesFilter[j].ustenciles.length; k++){
+          if(recipesFilter[j].ustenciles[k] == listTag[i].name){
             clearResponse.push(recipesFilter[j].id);
           }
         }
@@ -199,8 +199,8 @@ function displayTag(){
       tag.classList.add('ingredients');
     } else if(data.type == "appareils"){
       tag.classList.add('appareils');
-    } else if(data.type == "ustensiles"){
-      tag.classList.add('ustensiles');
+    } else if(data.type == "ustenciles"){
+      tag.classList.add('ustenciles');
     }
     tags.appendChild(tag);
     let close = document.createElement('span');
