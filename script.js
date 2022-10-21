@@ -158,12 +158,23 @@ function createFilter(datas, divId) {
   datas.forEach((data) => {
     const span = document.createElement('span');
     span.textContent = data;
+    span.onclick = function() {
+      searchFilter(data, filter.id);
+    }
     filter.appendChild(span);
   });
 }
 
 //Affichage des filtres
 function displayFilter(filterName){
+  if(filterName == 'ingredients'){
+    createFilter(listIngredient, 'ingredients');
+  } else if (filterName == 'appareils'){
+    createFilter(listAppareils, 'appareils');
+  } else if (filterName == 'ustenciles'){
+    createFilter(listUstenciles, 'ustenciles');
+  }
+
   const filterContainer = document.getElementById(filterName + "Container");
   filterContainer.classList.toggle('expanded');
 
@@ -228,10 +239,40 @@ async function init() {
     let obj = new Object;
     obj.id = array[i].id;
     obj.ingredients = [];
+    obj.ustenciles = [];
     for(let j = 0;j < array[i].ingredients.length; j++){
       obj.ingredients.push(array[i].ingredients[j].ingredient.toLowerCase());
     }
+    obj.appareils = array[i].appliance.toLowerCase();
+    for(let j = 0;j < array[i].ustensils.length; j++){
+      obj.ustenciles.push(array[i].ustensils[j].toLowerCase());
+    }
     recipesFilter.push(obj);
+  }
+
+   //boucle de création du tableau des ingredients
+   for(let i = 0; i < array.length; i++){
+    for(let j = 0;j < array[i].ingredients.length; j++){
+      if(!listIngredient.includes(array[i].ingredients[j].ingredient.toLowerCase())){
+        listIngredient.push(array[i].ingredients[j].ingredient.toLowerCase());
+      }
+    }
+  }
+
+  //boucle de création du tableau des appareils
+  for(let i = 0; i < array.length; i++){
+    if(!listAppareils.includes(array[i].appliance.toLowerCase())){
+      listAppareils.push(array[i].appliance.toLowerCase());
+    }
+  }
+
+  //boucle de création du tableau des ustenciles
+  for(let i = 0; i < array.length; i++){
+    for(let j = 0;j < array[i].ustensils.length; j++){
+      if(!listUstenciles.includes(array[i].ustensils[j].toLowerCase())){
+        listUstenciles.push(array[i].ustensils[j].toLowerCase());
+      }
+    }
   }
 }
 
