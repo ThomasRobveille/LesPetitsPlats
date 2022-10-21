@@ -55,15 +55,15 @@ body{
   padding: 0 20px;  
 }
 
-.ingredients {
+.ingredients, .ingredients input {
   background: #3282f7;
 }
 
-.appareils{
+.appareils, .appareils input{
   background: #68d9a4;
 }
 
-.ustenciles{
+.ustenciles, .ustenciles input{
   background: #ed6454;
 }
 
@@ -88,7 +88,6 @@ body{
 }
 
 .filterInput{
-  background: #3282f7;
   color: white;
   width: 80%;
   height: 80px;
