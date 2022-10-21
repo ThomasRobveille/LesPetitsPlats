@@ -149,9 +149,9 @@ async function searchFilter(){
       for(let j = 0; j < recipesFilter.length; j++){
         if(recipesFilter[j].appareils.includes(listTag[i].name)) clearResponse.push(recipesFilter[j].id);
       }
-    } else if(listTag[i].type == "ustensiles"){    
+    } else if(listTag[i].type == "ustenciles"){    
       for(let j = 0; j < recipesFilter.length; j++){
-        if(recipesFilter[j].ustensiles.includes(listTag[i].name)) clearResponse.push(recipesFilter[j].id);
+        if(recipesFilter[j].ustenciles.includes(listTag[i].name)) clearResponse.push(recipesFilter[j].id);
       }
     }
   }
@@ -182,8 +182,8 @@ function displayTag(){
       tag.classList.add('ingredients');
     } else if(data.type == "appareils"){
       tag.classList.add('appareils');
-    } else if(data.type == "ustensiles"){
-      tag.classList.add('ustensiles');
+    } else if(data.type == "ustenciles"){
+      tag.classList.add('ustenciles');
     }
     tags.appendChild(tag);
     let close = document.createElement('span');
