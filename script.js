@@ -140,6 +140,32 @@ function createHTML(recipes){
   return { recipeCardDOM };
 }
 
+//Recherche par filtre
+async function searchFilter(data){
+  let clearResponse = [];
+  console.log(recipesFilter)
+  for(let i = 0; i < recipesFilter.length; i++){
+    for(let j = 0; j < recipesFilter[i].ingredients.length; j++){
+      if(recipesFilter[i].ingredients[j].toLowerCase() == data.toLowerCase()){
+        clearResponse.push(recipesFilter[i].id);
+      }
+    }      
+  }  
+
+  console.log(clearResponse)
+
+  //affichage des recettes
+  const recipes = await getRecipe();
+  let newRecipes = [];
+  for(let i = 0; i < recipes.length; i++){
+    if(clearResponse.includes(recipes[i].id)){
+      newRecipes.push(recipes[i]);
+    }
+  }
+
+  displayRecipe(newRecipes)
+}
+
 //Création des filtres
 function createFilter(datas, divId) {
   const filter = document.getElementById(divId);
