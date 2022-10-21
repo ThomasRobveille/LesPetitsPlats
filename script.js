@@ -3,6 +3,7 @@ const listIngredient = [];
 const listAppareils = [];
 const listUstenciles = [];
 const recipesFilter = [];
+let listTag = [];
 
 function getRecipe(){
   const recipes = fetch('./data/recipes.json')
@@ -115,31 +116,65 @@ function createHTML(recipes){
   return { recipeCardDOM };
 }
 
+function addTag(name, type){
+  let isPresent = false;
+  
+  if(listTag.length == 0){
+    isPresent = true;
+  } else {
+    for(let i = 0; i < listTag.length; i++){   
+      if(listTag[i].name == name) {
+        return
+      } else if(listTag[i].name != name){
+        isPresent = true;
+      }
+    }
+  }  
+
+  if(isPresent){
+    let obj = new Object;
+    obj.name = name;
+    obj.type = type;
+    listTag.push(obj);
+  }
+
+  displayTag();
+  searchFilter();
+}
 //Recherche par filtre
-async function searchFilter(data, id){
+async function searchFilter(){
   let clearResponse = [];
 
-  if(id == 'ingredients'){
-    for(let i = 0; i < recipesFilter.length; i++){
-      for(let j = 0; j < recipesFilter[i].ingredients.length; j++){
-        if(recipesFilter[i].ingredients[j].toLowerCase() == data.toLowerCase()){
-          clearResponse.push(recipesFilter[i].id);
+
+  for(let i = 0; i < listTag.length; i++){
+    if(listTag[i].type == "ingredients"){
+      for(let j = 0; j < recipesFilter.length; j++){
+        for(let k = 0; k < recipesFilter[j].ingredients.length; k++){
+          if(recipesFilter[j].ingredients[k] == listTag[i].name){            
+            clearResponse.push(recipesFilter[j].id);
+          }
         }
-      }      
-    }   
-  } else if(id == 'appareils'){
-    for(let i = 0; i < recipesFilter.length; i++){
-      if(recipesFilter[i].appareils.toLowerCase() == data.toLowerCase()) clearResponse.push(recipesFilter[i].id);
-    }
-  } else if(id == 'ustenciles'){
-    for(let i = 0; i < recipesFilter.length; i++){
-      if(recipesFilter[i].ustenciles.toLowerCase() == data.toLowerCase()) clearResponse.push(recipesFilter[i].id);
+      }
+    } else if(listTag[i].type == "appareils"){
+      for(let j = 0; j < recipesFilter.length; j++){
+        if(recipesFilter[j].appareils == listTag[i].name){
+          clearResponse.push(recipesFilter[j].id);
+        }
+      }
+    } else if(listTag[i].type == "ustensiles"){    
+      for(let j = 0; j < recipesFilter.length; j++){
+        for(let k = 0; k < recipesFilter[j].ustensiles.length; k++){
+          if(recipesFilter[j].ustensiles[k] == listTag[i].name){
+            clearResponse.push(recipesFilter[j].id);
+          }
+        }
+      }
     }
   }
 
-  console.log(clearResponse)
+  console.log(clearResponse);
 
-  //affichage des recettes
+//affichage des recettes
   const recipes = await getRecipe();
   let newRecipes = [];
   for(let i = 0; i < recipes.length; i++){
@@ -151,6 +186,48 @@ async function searchFilter(data, id){
   displayRecipe(newRecipes)
 }
 
+
+function displayTag(){
+  const tags = document.getElementById('tags');
+  tags.innerHTML = '';
+
+  listTag.forEach((data) => {
+    let tag = document.createElement('div');
+    tag.textContent = data.name;
+    tag.classList.add('tag');
+    if(data.type == "ingredients"){
+      tag.classList.add('ingredients');
+    } else if(data.type == "appareils"){
+      tag.classList.add('appareils');
+    } else if(data.type == "ustensiles"){
+      tag.classList.add('ustensiles');
+    }
+    tags.appendChild(tag);
+    let close = document.createElement('span');
+    close.classList.add('close');
+    close.onclick = function(){
+      closeTag(data.name);
+    }
+    close.textContent = 'X';
+    tag.appendChild(close);
+  });
+}
+
+async function closeTag(name){
+  for(let i = 0; i < listTag.length; i++){
+    if(listTag[i].name == name){
+      listTag.splice(i, 1);
+    }
+  }
+  displayTag();
+  if(listTag.length == 0){
+    const array = await getRecipe();
+    displayRecipe(array);
+  } else {
+    searchFilter();
+  }
+}
+
 //Création des filtres
 function createFilter(datas, divId) {
   const filter = document.getElementById(divId);
@@ -159,7 +236,7 @@ function createFilter(datas, divId) {
     const span = document.createElement('span');
     span.textContent = data;
     span.onclick = function() {
-      searchFilter(data, filter.id);
+      addTag(data, filter.id);
     }
     filter.appendChild(span);
   });
