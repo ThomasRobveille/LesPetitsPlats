@@ -2,6 +2,7 @@ const recipesWords = [];
 const listIngredient = [];
 const listAppareils = [];
 const listUstenciles = [];
+const recipesFilter = [];
 
 function getRecipe(){
   const recipes = fetch('./data/recipes.json')
@@ -35,6 +36,17 @@ async function init() {
       }      
     }
     recipesWords.push(obj);
+  }
+
+  //boucle de création du tableau des ingrédients
+  for(let i = 0; i < array.length; i++){
+    let obj = new Object;
+    obj.id = array[i].id;
+    obj.ingredients = [];
+    for(let j = 0;j < array[i].ingredients.length; j++){
+      obj.ingredients.push(array[i].ingredients[j].ingredient.toLowerCase());
+    }
+    recipesFilter.push(obj);
   }
 }
 
