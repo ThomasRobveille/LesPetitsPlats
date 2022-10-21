@@ -114,12 +114,17 @@ async function searchFilter(data){
   let clearResponse = [];
   console.log(recipesFilter)
   for(let i = 0; i < recipesFilter.length; i++){
-    for(let j = 0; j < recipesFilter[i].ingredients.length; j++){
-      if(recipesFilter[i].ingredients[j].toLowerCase() == data.toLowerCase()){
-        clearResponse.push(recipesFilter[i].id);
-      }
-    }
-  }
+    if(recipesFilter[i].ingredients.includes(data)) clearResponse.push(recipesFilter[i].id);
+
+    // for(let j = 0; j < recipesFilter[i].ingredients.length; j++){
+    //   if(recipesFilter[i].ingredients.includes(data)) clearResponse.push(recipesFilter[i].id);
+    // }
+      // if(recipesFilter[i].ingredients[j].toLowerCase() == data.toLowerCase()){
+      //   clearResponse.push(recipesFilter[i].id);
+      // }
+  }  
+
+  console.log(clearResponse)
 
   //affichage des recettes
   const recipes = await getRecipe();
@@ -213,7 +218,7 @@ async function init() {
     obj.id = array[i].id;
     obj.ingredients = [];
     for(let j = 0;j < array[i].ingredients.length; j++){
-      obj.ingredients.push(array[i].ingredients[j].ingredient);
+      obj.ingredients.push(array[i].ingredients[j].ingredient.toLowerCase());
     }
     recipesFilter.push(obj);
   }
