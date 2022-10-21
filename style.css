@@ -44,7 +44,6 @@ body{
 .filter{
   width: 150px;
   height: 80px;
-  background: #3282f7;
   color: white;
   display: flex;
   flex-direction: column;  
@@ -54,6 +53,18 @@ body{
   border-radius: 5px;
   margin: 0 20px;
   padding: 0 20px;  
+}
+
+.ingredients {
+  background: #3282f7;
+}
+
+.appareils{
+  background: #68d9a4;
+}
+
+.ustenciles{
+  background: #ed6454;
 }
 
 .disabled{
