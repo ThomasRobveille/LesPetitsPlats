@@ -115,13 +115,6 @@ async function searchFilter(data){
   console.log(recipesFilter)
   for(let i = 0; i < recipesFilter.length; i++){
     if(recipesFilter[i].ingredients.includes(data)) clearResponse.push(recipesFilter[i].id);
-
-    // for(let j = 0; j < recipesFilter[i].ingredients.length; j++){
-    //   if(recipesFilter[i].ingredients.includes(data)) clearResponse.push(recipesFilter[i].id);
-    // }
-      // if(recipesFilter[i].ingredients[j].toLowerCase() == data.toLowerCase()){
-      //   clearResponse.push(recipesFilter[i].id);
-      // }
   }  
 
   console.log(clearResponse)
