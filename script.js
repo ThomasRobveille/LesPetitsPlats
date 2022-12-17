@@ -20,17 +20,16 @@ async function searchRecipe() {
 
   //boucle de recherche des recettes
   let responses = [];
-    for(let i = 0; i < recipesWords.length; i++){
-      if(recipesWords[i].words.includes(wordSeeked)) responses.push(recipesWords[i].id);
-    }
+  recipesWords.forEach((item) => {
+    if(item.words.includes(wordSeeked)) responses.push(item.id);
+  })
   
   //nettoyage du tableau de réponses
   let clearResponse = [];
-  for(let i = 0; i < responses.length; i++){
-    if(responses[i] != responses[i+1]){
-      clearResponse.push(responses[i]);
-    }
-  }
+  responses.forEach((item) => {
+    if(!clearResponse.includes(item)) clearResponse.push(item);
+  });
+  
 
   //affichage des recettes
   const recipes = await getRecipe();
@@ -54,60 +53,10 @@ function displayRecipe(recipes){
   recipesSection.innerHTML = '';
 
   recipes.forEach((recipe) => {
-    const recipesModel = createHTML(recipe);
+    const recipesModel = recipeFactory(recipe);
     const recipeCardDOM = recipesModel.recipeCardDOM();
     recipesSection.appendChild(recipeCardDOM);
   });
-}
-
-function createHTML(recipes){
-  const { name, time, ingredients, description } = recipes;
-
-  function recipeCardDOM() {
-    const article = document.createElement('article');
-
-    const img = document.createElement('div');
-    img.classList.add('img');
-    article.appendChild(img);
-
-    const content = document.createElement('div');
-    content.classList.add('content');
-    article.appendChild(content);
-
-    const title = document.createElement('div');
-    title.classList.add('title');
-    content.appendChild(title);
-  
-    const h2 = document.createElement('h2');
-    h2.textContent = name;
-    title.appendChild(h2);
-  
-    const cookTime = document.createElement('p');
-    cookTime.classList.add('time');
-    cookTime.textContent = time + " min";
-    title.appendChild(cookTime);
-
-    const descrip = document.createElement('div');
-    descrip.classList.add('description');
-    descrip.title = description;
-    content.appendChild(descrip);
-  
-    const ul = document.createElement('ul');
-    for(let i = 0; i < ingredients.length; i++){
-      const li = document.createElement('li');
-      li.textContent = ingredients[i].ingredient + " : " + ingredients[i].quantity + " " + ingredients[i].unit;
-      ul.appendChild(li);
-    }
-    descrip.appendChild(ul);
-  
-    const p2 = document.createElement('p');
-    p2.textContent = description;
-    descrip.appendChild(p2);
-  
-    return article;
-  }  
-
-  return { recipeCardDOM };
 }
 
 function addTag(name, type){
@@ -140,21 +89,21 @@ function addTag(name, type){
 async function searchFilter(){
   let clearResponse = [];
 
-  for(let i = 0; i < listTag.length; i++){
-    if(listTag[i].type == "ingredients"){
-      for(let j = 0; j < recipesFilter.length; j++){
-        if(recipesFilter[j].ingredients.includes(listTag[i].name)) clearResponse.push(recipesFilter[j].id);
-      }
-    } else if(listTag[i].type == "appareils"){
-      for(let j = 0; j < recipesFilter.length; j++){
-        if(recipesFilter[j].appareils.includes(listTag[i].name)) clearResponse.push(recipesFilter[j].id);
-      }
-    } else if(listTag[i].type == "ustenciles"){    
-      for(let j = 0; j < recipesFilter.length; j++){
-        if(recipesFilter[j].ustenciles.includes(listTag[i].name)) clearResponse.push(recipesFilter[j].id);
-      }
+  listTag.forEach((tag) => {
+    if(tag.type == 'ingredients'){
+      recipesFilter.forEach((item) => {
+        if(item.ingredients.includes(tag.name)) clearResponse.push(item.id);
+      })
+    } else if(tag.type == 'appareils'){
+      recipesFilter.forEach((item) => {
+        if(item.appareils.includes(tag.name)) clearResponse.push(item.id);
+      })
+    } else if(tag.type == 'ustenciles'){
+      recipesFilter.forEach((item) => {
+        if(item.ustenciles.includes(tag.name)) clearResponse.push(item.id);
+      })
     }
-  }
+  })
 
   console.log(clearResponse);
 
@@ -209,19 +158,6 @@ async function closeTag(name){
   } else {
     searchFilter();
   }
-}
-
-function createFilter(datas, divId) {
-  const filter = document.getElementById(divId);
-
-  datas.forEach((data) => {
-    const span = document.createElement('span');
-    span.textContent = data;
-    span.onclick = function() {
-      addTag(data, filter.id);
-    }
-    filter.appendChild(span);
-  });
 }
 
 //Affichage des filtres
