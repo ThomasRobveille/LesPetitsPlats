@@ -5,15 +5,6 @@ const listAppareils = [];
 const listUstenciles = [];
 let listTag = [];
 
-// function getRecipe(){
-//   const recipes = fetch('./data/recipes.json')
-//                   .then(data => data.json())
-//                   .then(data => data.recipes)
-//                   .catch(error => console.log(error));
-
-//   return recipes;
-// }
-
 async function searchRecipe() {
   //récupération du mot recherché
    const wordSeeked = document.getElementById('search').value;  
@@ -48,43 +39,6 @@ async function searchRecipe() {
   } 
 }
 
-function displayRecipe(recipes){
-  const recipesSection = document.getElementById('recipesSection');
-  recipesSection.innerHTML = '';
-
-  recipes.forEach((recipe) => {
-    const recipesModel = factoryRecipes(recipe);
-    const recipeCardDOM = recipesModel.recipeCardDOM();
-    recipesSection.appendChild(recipeCardDOM);
-  });
-}
-
-function addTag(name, type){
-  let isPresent = false;
-  
-  if(listTag.length == 0){
-    isPresent = true;
-  } else {
-    for(let i = 0; i < listTag.length; i++){   
-      if(listTag[i].name == name) {
-        return
-      } else if(listTag[i].name != name){
-        isPresent = true;
-      }
-    }
-  }  
-
-  if(isPresent){
-    let obj = new Object;
-    obj.name = name;
-    obj.type = type;
-    listTag.push(obj);
-  }
-
-  displayTag();
-  searchFilter();
-}
-
 //Recherche par filtre
 async function searchFilter(){
   let clearResponse = [];
@@ -117,54 +71,6 @@ async function searchFilter(){
   }
 
   displayRecipe(newRecipes)
-}
-
-//Affichage des filtres
-function displayFilter(filterName){
-  if(filterName == 'ingredients'){
-    createFilter(listIngredient, 'ingredients');
-  } else if (filterName == 'appareils'){
-    createFilter(listAppareils, 'appareils');
-  } else if (filterName == 'ustenciles'){
-    createFilter(listUstenciles, 'ustenciles');
-  }
-
-  const filterContainer = document.getElementById(filterName + "Container");
-  filterContainer.classList.toggle('expanded');
-
-  const filterTitle = document.getElementById(filterName + "Title");
-  filterTitle.classList.toggle('enabled');
-
-  const filterInput = document.getElementById(filterName + "Input");
-  filterInput.classList.toggle('enabled');
-
-  const filterClose = document.getElementById(filterName + "Close");
-  filterClose.classList.toggle('rotation');
-
-  const filter = document.getElementById(filterName);
-  filter.classList.toggle('enabled');
-}
-
-//Fermeture des filtres
-function closeFilter(filterName){
-  
-  const filterContainer = document.getElementById(filterName + "Container");
-  // if(filterContainer.classList.contains('expanded')){
-  //   createFilter(listIngredient, filterName);
-  // }
-  filterContainer.classList.toggle('expanded');
-
-  const filterTitle = document.getElementById(filterName + "Title");
-  filterTitle.classList.toggle('enabled');
-
-  const filterInput = document.getElementById(filterName + "Input");
-  filterInput.classList.toggle('enabled');
-
-  const filterClose = document.getElementById(filterName + "Close");
-  filterClose.classList.toggle('rotation');
-
-  const filter = document.getElementById(filterName);
-  filter.classList.toggle('enabled');
 }
 
 async function init() {

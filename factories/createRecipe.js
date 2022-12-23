@@ -47,3 +47,14 @@ function factoryRecipes(recipes){
 
   return { recipeCardDOM };
 }
+
+function displayRecipe(recipes){
+  const recipesSection = document.getElementById('recipesSection');
+  recipesSection.innerHTML = '';
+
+  recipes.forEach((recipe) => {
+    const recipesModel = factoryRecipes(recipe);
+    const recipeCardDOM = recipesModel.recipeCardDOM();
+    recipesSection.appendChild(recipeCardDOM);
+  });
+}

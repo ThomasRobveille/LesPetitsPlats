@@ -38,3 +38,29 @@ async function closeTag(name){
     searchFilter();
   }
 }
+
+function addTag(name, type){
+  let isPresent = false;
+  
+  if(listTag.length == 0){
+    isPresent = true;
+  } else {
+    for(let i = 0; i < listTag.length; i++){   
+      if(listTag[i].name == name) {
+        return
+      } else if(listTag[i].name != name){
+        isPresent = true;
+      }
+    }
+  }  
+
+  if(isPresent){
+    let obj = new Object;
+    obj.name = name;
+    obj.type = type;
+    listTag.push(obj);
+  }
+
+  displayTag();
+  searchFilter();
+}
