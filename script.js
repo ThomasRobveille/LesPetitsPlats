@@ -5,15 +5,6 @@ const listUstenciles = [];
 const recipesFilter = [];
 let listTag = [];
 
-function getRecipe(){
-  const recipes = fetch('./data/recipes.json')
-                  .then(data => data.json())
-                  .then(data => data.recipes)
-                  .catch(error => console.log(error));
-
-  return recipes;
-}
-
 async function searchRecipe() {
   //récupération du mot recherché
   const wordSeeked = document.getElementById('search').value;
@@ -37,7 +28,7 @@ async function searchRecipe() {
   }
 
   //affichage des recettes
-  const recipes = await getRecipe();
+  const recipes = await getRecipes();
   let newRecipes = [];
   for(let i = 0; i < clearResponse.length; i++){
     for(let j = 0; j < recipes.length; j++){
@@ -55,92 +46,6 @@ async function searchRecipe() {
   }
 }
 
-function displayRecipe(recipes){
-  const recipesSection = document.getElementById('recipesSection');
-  recipesSection.innerHTML = '';
-
-  recipes.forEach((recipe) => {
-    const recipesModel = createHTML(recipe);
-    const recipeCardDOM = recipesModel.recipeCardDOM();
-    recipesSection.appendChild(recipeCardDOM);
-  });
-}
-
-function createHTML(recipes){
-  const { name, time, ingredients, description } = recipes;
-
-  function recipeCardDOM() {
-    const article = document.createElement('article');
-
-    const img = document.createElement('div');
-    img.classList.add('img');
-    article.appendChild(img);
-
-    const content = document.createElement('div');
-    content.classList.add('content');
-    article.appendChild(content);
-
-    const title = document.createElement('div');
-    title.classList.add('title');
-    content.appendChild(title);
-  
-    const h2 = document.createElement('h2');
-    h2.textContent = name;
-    title.appendChild(h2);
-  
-    const cookTime = document.createElement('p');
-    cookTime.classList.add('time');
-    cookTime.textContent = time + " min";
-    title.appendChild(cookTime);
-
-    const descrip = document.createElement('div');
-    descrip.classList.add('description');
-    descrip.title = description;
-    content.appendChild(descrip);
-  
-    const ul = document.createElement('ul');
-    for(let i = 0; i < ingredients.length; i++){
-      const li = document.createElement('li');
-      li.textContent = ingredients[i].ingredient + " : " + ingredients[i].quantity + " " + ingredients[i].unit;
-      ul.appendChild(li);
-    }
-    descrip.appendChild(ul);
-  
-    const p2 = document.createElement('p');
-    p2.textContent = description;
-    descrip.appendChild(p2);
-  
-    return article;
-  }  
-
-  return { recipeCardDOM };
-}
-
-function addTag(name, type){
-  let isPresent = false;
-  
-  if(listTag.length == 0){
-    isPresent = true;
-  } else {
-    for(let i = 0; i < listTag.length; i++){   
-      if(listTag[i].name == name) {
-        return
-      } else if(listTag[i].name != name){
-        isPresent = true;
-      }
-    }
-  }  
-
-  if(isPresent){
-    let obj = new Object;
-    obj.name = name;
-    obj.type = type;
-    listTag.push(obj);
-  }
-
-  displayTag();
-  searchFilter();
-}
 //Recherche par filtre
 async function searchFilter(){
   let clearResponse = [];
@@ -175,7 +80,7 @@ recipesFilter
   console.log(clearResponse);
 
 //affichage des recettes
-  const recipes = await getRecipe();
+  const recipes = await getRecipes();
   let newRecipes = [];
   for(let i = 0; i < recipes.length; i++){
     if(clearResponse.includes(recipes[i].id)){
@@ -186,109 +91,9 @@ recipesFilter
   displayRecipe(newRecipes)
 }
 
-
-function displayTag(){
-  const tags = document.getElementById('tags');
-  tags.innerHTML = '';
-
-  listTag.forEach((data) => {
-    let tag = document.createElement('div');
-    tag.textContent = data.name;
-    tag.classList.add('tag');
-    if(data.type == "ingredients"){
-      tag.classList.add('ingredients');
-    } else if(data.type == "appareils"){
-      tag.classList.add('appareils');
-    } else if(data.type == "ustenciles"){
-      tag.classList.add('ustenciles');
-    }
-    tags.appendChild(tag);
-    let close = document.createElement('span');
-    close.classList.add('close');
-    close.onclick = function(){
-      closeTag(data.name);
-    }
-    close.textContent = 'X';
-    tag.appendChild(close);
-  });
-}
-
-async function closeTag(name){
-  for(let i = 0; i < listTag.length; i++){
-    if(listTag[i].name == name){
-      listTag.splice(i, 1);
-    }
-  }
-  displayTag();
-  if(listTag.length == 0){
-    const array = await getRecipe();
-    displayRecipe(array);
-  } else {
-    searchFilter();
-  }
-}
-
-//Création des filtres
-function createFilter(datas, divId) {
-  const filter = document.getElementById(divId);
-
-  datas.forEach((data) => {
-    const span = document.createElement('span');
-    span.textContent = data;
-    span.onclick = function() {
-      addTag(data, filter.id);
-    }
-    filter.appendChild(span);
-  });
-}
-
-//Affichage des filtres
-function displayFilter(filterName){
-  if(filterName == 'ingredients'){
-    createFilter(listIngredient, 'ingredients');
-  } else if (filterName == 'appareils'){
-    createFilter(listAppareils, 'appareils');
-  } else if (filterName == 'ustenciles'){
-    createFilter(listUstenciles, 'ustenciles');
-  }
-
-  const filterContainer = document.getElementById(filterName + "Container");
-  filterContainer.classList.toggle('expanded');
-
-  const filterTitle = document.getElementById(filterName + "Title");
-  filterTitle.classList.toggle('enabled');
-
-  const filterInput = document.getElementById(filterName + "Input");
-  filterInput.classList.toggle('enabled');
-
-  const filterClose = document.getElementById(filterName + "Close");
-  filterClose.classList.toggle('rotation');
-
-  const filter = document.getElementById(filterName);
-  filter.classList.toggle('enabled');
-}
-
-//Fermeture des filtres
-function closeFilter(filterName){
-  const filterContainer = document.getElementById(filterName + "Container");
-  filterContainer.classList.toggle('expanded');
-
-  const filterTitle = document.getElementById(filterName + "Title");
-  filterTitle.classList.toggle('enabled');
-
-  const filterInput = document.getElementById(filterName + "Input");
-  filterInput.classList.toggle('enabled');
-
-  const filterClose = document.getElementById(filterName + "Close");
-  filterClose.classList.toggle('rotation');
-
-  const filter = document.getElementById(filterName);
-  filter.classList.toggle('enabled');
-}
-
 async function init() {
   //récupération des recettes
-  const array = await getRecipe();
+  const array = await getRecipes();
 
   displayRecipe(array);
   
