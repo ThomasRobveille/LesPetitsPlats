@@ -5,14 +5,14 @@ const listAppareils = [];
 const listUstenciles = [];
 let listTag = [];
 
-function getRecipe(){
-  const recipes = fetch('./data/recipes.json')
-                  .then(data => data.json())
-                  .then(data => data.recipes)
-                  .catch(error => console.log(error));
+// function getRecipe(){
+//   const recipes = fetch('./data/recipes.json')
+//                   .then(data => data.json())
+//                   .then(data => data.recipes)
+//                   .catch(error => console.log(error));
 
-  return recipes;
-}
+//   return recipes;
+// }
 
 async function searchRecipe() {
   //récupération du mot recherché
@@ -53,7 +53,7 @@ function displayRecipe(recipes){
   recipesSection.innerHTML = '';
 
   recipes.forEach((recipe) => {
-    const recipesModel = recipeFactory(recipe);
+    const recipesModel = factoryRecipes(recipe);
     const recipeCardDOM = recipesModel.recipeCardDOM();
     recipesSection.appendChild(recipeCardDOM);
   });
@@ -117,47 +117,6 @@ async function searchFilter(){
   }
 
   displayRecipe(newRecipes)
-}
-
-function displayTag(){
-  const tags = document.getElementById('tags');
-  tags.innerHTML = '';
-
-  listTag.forEach((data) => {
-    let tag = document.createElement('div');
-    tag.textContent = data.name;
-    tag.classList.add('tag');
-    if(data.type == "ingredients"){
-      tag.classList.add('ingredients');
-    } else if(data.type == "appareils"){
-      tag.classList.add('appareils');
-    } else if(data.type == "ustenciles"){
-      tag.classList.add('ustenciles');
-    }
-    tags.appendChild(tag);
-    let close = document.createElement('span');
-    close.classList.add('close');
-    close.onclick = function(){
-      closeTag(data.name);
-    }
-    close.textContent = 'X';
-    tag.appendChild(close);
-  });
-}
-
-async function closeTag(name){
-  for(let i = 0; i < listTag.length; i++){
-    if(listTag[i].name == name){
-      listTag.splice(i, 1);
-    }
-  }
-  displayTag();
-  if(listTag.length == 0){
-    const array = await getRecipe();
-    displayRecipe(array);
-  } else {
-    searchFilter();
-  }
 }
 
 //Affichage des filtres

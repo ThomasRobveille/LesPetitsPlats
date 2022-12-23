@@ -1,0 +1,40 @@
+function displayTag(){
+  const tags = document.getElementById('tags');
+  tags.innerHTML = '';
+
+  listTag.forEach((data) => {
+    let tag = document.createElement('div');
+    tag.textContent = data.name;
+    tag.classList.add('tag');
+    if(data.type == "ingredients"){
+      tag.classList.add('ingredients');
+    } else if(data.type == "appareils"){
+      tag.classList.add('appareils');
+    } else if(data.type == "ustenciles"){
+      tag.classList.add('ustenciles');
+    }
+    tags.appendChild(tag);
+    let close = document.createElement('span');
+    close.classList.add('close');
+    close.onclick = function(){
+      closeTag(data.name);
+    }
+    close.textContent = 'X';
+    tag.appendChild(close);
+  });
+}
+
+async function closeTag(name){
+  for(let i = 0; i < listTag.length; i++){
+    if(listTag[i].name == name){
+      listTag.splice(i, 1);
+    }
+  }
+  displayTag();
+  if(listTag.length == 0){
+    const array = await getRecipe();
+    displayRecipe(array);
+  } else {
+    searchFilter();
+  }
+}
