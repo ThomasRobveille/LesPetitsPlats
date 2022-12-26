@@ -1,19 +1,32 @@
-const recipesWords = [];
+let recipesWords = [];
 const listIngredient = [];
 const listAppareils = [];
 const listUstenciles = [];
 const recipesFilter = [];
 let listTag = [];
 
-async function searchRecipe() {
-  //récupération du mot recherché
-  const wordSeeked = document.getElementById('search').value;
+function activeSearch(){
+  if(document.getElementById('search').value.length > 2){
+    //récupération du mot recherché
+    const wordInput = document.getElementById('search').value;
+    const wordSeeked = wordInput.split(" ");
 
+    //boucle de recherche des recettes
+    for(let i = 0; i < wordSeeked.length; i++){
+      searchRecipe(wordSeeked[i]);
+    }
+  } else {
+    console.log("Veuillez entrer au moins 3 caractères")
+  }
+    
+}
+
+async function searchRecipe(wordSeeked) {
   //boucle de recherche des recettes
   let responses = [];
   for(let i = 0; i < recipesWords.length; i++){
     for(let j = 0; j < recipesWords[i].words.length; j++){
-      if(recipesWords[i].words[j] == wordSeeked){ 
+      if(recipesWords[i].words[j].indexOf(wordSeeked) != -1){ 
         responses.push(recipesWords[i].id);      
       }
     }
@@ -36,10 +49,11 @@ async function searchRecipe() {
         newRecipes.push(recipes[j]);
       }
     }
-  }
+  }  
 
   if(clearResponse.length > 0){
     displayRecipe(newRecipes)
+    createArrayOfWords(newRecipes);
     console.log(clearResponse);  
   } else {
     alert ("Aucune recette ne correspond à votre critère... Vous pouvez chercher « tarte aux pommes », « poisson », etc.");
@@ -91,13 +105,8 @@ recipesFilter
   displayRecipe(newRecipes)
 }
 
-async function init() {
-  //récupération des recettes
-  const array = await getRecipes();
-
-  displayRecipe(array);
-  
-  //boucle de création du array des recettes
+function createArrayOfWords(array){
+  recipesWords = [];
   for(let i = 0; i < array.length; i++){
     let obj = new Object;
     obj.id = array[i].id;
@@ -115,6 +124,19 @@ async function init() {
     }
     recipesWords.push(obj);
   }
+
+  console.log(recipesWords)
+}
+
+async function init() {
+  //récupération des recettes
+  const array = await getRecipes();
+
+  displayRecipe(array);
+
+  //boucle de création du array des recettes
+  createArrayOfWords(array); 
+  
 
   //boucle de création du tableau des ingrédients
   for(let i = 0; i < array.length; i++){
