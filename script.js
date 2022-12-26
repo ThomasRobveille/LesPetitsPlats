@@ -1,18 +1,35 @@
-const recipesWords = [];
+let recipesWords = [];
 const recipesFilter = [];
 const listIngredient = [];
 const listAppareils = [];
 const listUstenciles = [];
 let listTag = [];
 
-async function searchRecipe() {
-  //récupération du mot recherché
-   const wordSeeked = document.getElementById('search').value;  
+function activeSearch(){
+  if(document.getElementById('search').value.length > 2){
+    //récupération du mot recherché
+    const wordInput = document.getElementById('search').value;
+    const wordSeeked = wordInput.split(" ");
+
+    //boucle de recherche des recettes
+    for(let i = 0; i < wordSeeked.length; i++){
+      searchRecipe(wordSeeked[i]);
+    }
+  } else {
+    console.log("Veuillez entrer au moins 3 caractères")
+  }
+    
+}
+
+async function searchRecipe(wordSeeked) { 
+  
 
   //boucle de recherche des recettes
   let responses = [];
   recipesWords.forEach((item) => {
-    if(item.words.includes(wordSeeked)) responses.push(item.id);
+    item.words.forEach((word) => {
+      if(word.indexOf(wordSeeked) != -1) responses.push(item.id);
+    })
   })
   
   //nettoyage du tableau de réponses
@@ -23,7 +40,7 @@ async function searchRecipe() {
   
 
   //affichage des recettes
-  const recipes = await getRecipe();
+  const recipes = await getRecipes();
   let newRecipes = [];
   for(let i = 0; i < recipes.length; i++){
     if(clearResponse.includes(recipes[i].id)){
@@ -75,7 +92,7 @@ async function searchFilter(){
 
 async function init() {
   //récupération des recettes
-  const array = await getRecipe();
+  const array = await getRecipes();
 
   displayRecipe(array);
   

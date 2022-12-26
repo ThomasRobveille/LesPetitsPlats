@@ -1,4 +1,4 @@
-function getRecipe() {
+function getRecipes() {
 const getData = fetch('./data/recipes.json')
   .then(data => data.json())
   .then(data => data.recipes)
